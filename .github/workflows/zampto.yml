@@ -14,8 +14,8 @@ jobs:
       ZAMPTO_SERVER_IDS: ${{ secrets.ZAMPTO_SERVER_IDS }}
       ZAMPTO_ACCOUNTS:   ${{ secrets.ZAMPTO_ACCOUNTS }}
       XRAY_VLESS:        ${{ secrets.XRAY_VLESS }}
-      ZAMPTO_TG_BOT:     ${{ secrets.ZAMPTO_TG_BOT }}
-      ZAMPTO_TG_CHAT_ID: ${{ secrets.ZAMPTO_TG_CHAT_ID }}
+      TG_BOT_TOKEN:      ${{ secrets.TG_BOT_TOKEN }}
+      TG_CHAT_ID:        ${{ secrets.TG_CHAT_ID }}
 
     steps:
       - name: 📥 检出私库脚本
