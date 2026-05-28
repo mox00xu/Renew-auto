@@ -1,57 +1,53 @@
-
 name: Zampto Auto Renew
 
 on:
   schedule:
-    - cron: '20 0 * * *'  
+    - cron: '0 */6 * * *'  # 每 6 小时
   workflow_dispatch:
 
 jobs:
   renew:
     runs-on: ubuntu-latest
     env:
-      # 账号配置（二选一）
-      # 方式 1：单账号模式
-      ZAMPTO_EMAIL: ${{ secrets.ZAMPTO_EMAIL }}
-      ZAMPTO_PASSWORD: ${{ secrets.ZAMPTO_PASSWORD }}
+      ZAMPTO_EMAIL:      ${{ secrets.ZAMPTO_EMAIL }}
+      ZAMPTO_PASSWORD:   ${{ secrets.ZAMPTO_PASSWORD }}
       ZAMPTO_SERVER_IDS: ${{ secrets.ZAMPTO_SERVER_IDS }}
-      
-      # 方式 2：多账号模式（优先级更高）
-      ZAMPTO_ACCOUNTS: ${{ secrets.ZAMPTO_ACCOUNTS }}
-      XRAY_VLESS: ${{ secrets.XRAY_VLESS }}
-      ZAMPTO_TG_BOT: ${{ secrets.ZAMPTO_TG_BOT }}
+      ZAMPTO_ACCOUNTS:   ${{ secrets.ZAMPTO_ACCOUNTS }}
+      XRAY_VLESS:        ${{ secrets.XRAY_VLESS }}
+      ZAMPTO_TG_BOT:     ${{ secrets.ZAMPTO_TG_BOT }}
       ZAMPTO_TG_CHAT_ID: ${{ secrets.ZAMPTO_TG_CHAT_ID }}
 
     steps:
       - name: 📥 检出私库脚本
         uses: actions/checkout@v4
         with:
-          repository: mox00xu/Renew-private-auto
+          repository: ${{ secrets.PRIVATE_REPO }}
           token: ${{ secrets.PAT_TOKEN }}
           path: scripts
+          sparse-checkout: Zampto_private_re
+          sparse-checkout-cone-mode: true
 
-      - name: Setup Python
+      - name: 🐍 Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install system dependencies
+      - name: 🛠️ Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb
 
-      - name: Install Python dependencies
-        run: |
-          pip install -r scripts/requirements.txt
+      - name: 📦 Install Python dependencies
+        run: pip install -r scripts/Zampto_private_re/requirements.txt
 
-      - name: Install Xray-core
+      - name: ⚡ Install Xray-core
         run: |
           curl -L -o xray.zip https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
           unzip xray.zip -d /tmp/xray
           sudo mv /tmp/xray/xray /usr/local/bin/
           sudo chmod +x /usr/local/bin/xray
 
-      - name: Run renew script
+      - name: 🚀 Run renew script
         run: |
-          cd scripts
+          cd scripts/Zampto_private_re
           python3 renew.py
