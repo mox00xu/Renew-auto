@@ -26,7 +26,7 @@ jobs:
       - name: 📥 检出私库脚本
         uses: actions/checkout@v4
         with:
-          repository: ${{ secrets.PRIVATE_REPO }}
+          repository: mox00xu/Renew-private-auto/Zampto_private_re
           token: ${{ secrets.PAT_TOKEN }}
           path: scripts
 
